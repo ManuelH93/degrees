@@ -68,19 +68,19 @@ def main():
     if target is None:
         sys.exit("Person not found.")
 
-    #path = shortest_path(source, target)
+    path = shortest_path(source, target)
 
-    #if path is None:
-    #    print("Not connected.")
-    #else:
-    #    degrees = len(path)
-    #    print(f"{degrees} degrees of separation.")
-    #    path = [(None, source)] + path
-    #    for i in range(degrees):
-    #        person1 = people[path[i][1]]["name"]
-    #        person2 = people[path[i + 1][1]]["name"]
-    #        movie = movies[path[i + 1][0]]["title"]
-    #       print(f"{i + 1}: {person1} and {person2} starred in {movie}")
+    if path is None:
+        print("Not connected.")
+    else:
+        degrees = len(path)
+        print(f"{degrees} degrees of separation.")
+        path = [(None, source)] + path
+        for i in range(degrees):
+            person1 = people[path[i][1]]["name"]
+            person2 = people[path[i + 1][1]]["name"]
+            movie = movies[path[i + 1][0]]["title"]
+            print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
 
 def shortest_path(source, target):
@@ -123,19 +123,13 @@ def shortest_path(source, target):
                     #print(node.state)
                     #print(node.action)
                     #print(node.parent.state)
-                    movies = []
-                    stars = []
+                    path = []
                     while node.parent is not None:
-                        movies.append(node.action)
-                        stars.append(node.state)
+                        path.append((node.action, node.state))
                         node = node.parent
-                    movies.reverse()
-                    stars.reverse()
-                    solution = (movies, stars)
-                    print(solution)
-                    return solution
-
-
+                    path.reverse()
+                    print(path)
+                    return path
 
 def person_id_for_name(name):
     """
@@ -175,33 +169,5 @@ def neighbors_for_person(person_id):
             neighbors.add((movie_id, person_id))
     return neighbors
 
-
-directory = 'small'
-
-print("Loading data...")
-load_data(directory)
-print("Data loaded.")
-
-source = person_id_for_name(input("Name: "))
-if source is None:
-    sys.exit("Person not found.")
-target = person_id_for_name(input("Name: "))
-if target is None:
-    sys.exit("Person not found.")
-
-shortest_path(source, target)
-
-#print('names')
-#print(type(names))
-#print(names)
-#print('movies')
-#print(type(movies))
-#print(movies)
-#print('people')
-#print(type(people))
-#print(people)
-
-#print("neighbors source")
-#print(neighbors_for_person(source))
-#print("neighbors target")
-#print(neighbors_for_person(target))
+if __name__ == "__main__":
+    main()
