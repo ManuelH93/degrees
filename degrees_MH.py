@@ -51,7 +51,6 @@ def load_data(directory):
             except KeyError:
                 pass
 
-
 def main():
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
@@ -69,19 +68,19 @@ def main():
     if target is None:
         sys.exit("Person not found.")
 
-    path = shortest_path(source, target)
+    #path = shortest_path(source, target)
 
-    if path is None:
-        print("Not connected.")
-    else:
-        degrees = len(path)
-        print(f"{degrees} degrees of separation.")
-        path = [(None, source)] + path
-        for i in range(degrees):
-            person1 = people[path[i][1]]["name"]
-            person2 = people[path[i + 1][1]]["name"]
-            movie = movies[path[i + 1][0]]["title"]
-            print(f"{i + 1}: {person1} and {person2} starred in {movie}")
+    #if path is None:
+    #    print("Not connected.")
+    #else:
+    #    degrees = len(path)
+    #    print(f"{degrees} degrees of separation.")
+    #    path = [(None, source)] + path
+    #    for i in range(degrees):
+    #        person1 = people[path[i][1]]["name"]
+    #        person2 = people[path[i + 1][1]]["name"]
+    #        movie = movies[path[i + 1][0]]["title"]
+    #       print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
 
 def shortest_path(source, target):
@@ -92,8 +91,50 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    # Initialize frontier to just the starting position
+    start = Node(state=source, parent=None, action=None)
+    frontier = QueueFrontier()
+    frontier.add(start)
+
+    # Initialize an empty explored set
+    explored = set()
+
+    # Keep looping until solution found
+    while True:
+
+        # If nothing left in frontier, then no path
+        if frontier.empty():
+            raise Exception("no solution")
+
+        # Choose a node from the frontier
+        node = frontier.remove()
+        
+        # Mark node as explored
+        explored.add(node.state)
+
+        # Add neighbors to frontier
+        for movie, star in neighbors_for_person(node.state):
+            if not frontier.contains_state(star) and star not in explored:
+                child = Node(state=star, parent=node, action=movie)
+                frontier.add(child)
+                # If child node is the goal, then we have a solution
+                if child.state == target:
+                    node = child
+                    #print(node.state)
+                    #print(node.action)
+                    #print(node.parent.state)
+                    movies = []
+                    stars = []
+                    while node.parent is not None:
+                        movies.append(node.action)
+                        stars.append(node.state)
+                        node = node.parent
+                    movies.reverse()
+                    stars.reverse()
+                    solution = (movies, stars)
+                    print(solution)
+                    return solution
+
 
 
 def person_id_for_name(name):
@@ -148,17 +189,19 @@ target = person_id_for_name(input("Name: "))
 if target is None:
     sys.exit("Person not found.")
 
-print('names')
-print(type(names))
-print(names)
-print('movies')
-print(type(movies))
-print(movies)
-print('people')
-print(type(people))
-print(people)
+shortest_path(source, target)
 
-print("neighbors source")
-print(neighbors_for_person(source))
-print("neighbors target")
-print(neighbors_for_person(target))
+#print('names')
+#print(type(names))
+#print(names)
+#print('movies')
+#print(type(movies))
+#print(movies)
+#print('people')
+#print(type(people))
+#print(people)
+
+#print("neighbors source")
+#print(neighbors_for_person(source))
+#print("neighbors target")
+#print(neighbors_for_person(target))
