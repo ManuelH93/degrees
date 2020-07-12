@@ -112,7 +112,6 @@ def shortest_path(source, target):
 
         # Choose a node from the frontier
         node = frontier.remove()
-        #print(node.state)
         
         # Mark node as explored
         explored.add(node.state)
@@ -125,15 +124,11 @@ def shortest_path(source, target):
                 # If child node is the goal, then we have a solution
                 if child.state == target:
                     node = child
-                    #print(node.state)
-                    #print(node.action)
-                    #print(node.parent.state)
                     path = []
                     while node.parent is not None:
                         path.append((node.action, node.state))
                         node = node.parent
                     path.reverse()
-                    #print(path)
                     return path
 
 def person_id_for_name(name):
