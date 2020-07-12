@@ -109,6 +109,7 @@ def shortest_path(source, target):
 
         # Choose a node from the frontier
         node = frontier.remove()
+        #print(node.state)
         
         # Mark node as explored
         explored.add(node.state)
@@ -129,7 +130,7 @@ def shortest_path(source, target):
                         path.append((node.action, node.state))
                         node = node.parent
                     path.reverse()
-                    print(path)
+                    #print(path)
                     return path
 
 def person_id_for_name(name):
