@@ -68,6 +68,9 @@ def main():
     if target is None:
         sys.exit("Person not found.")
 
+    if source == target:
+        sys.exit("Enter different names for start and goal.")
+
     path = shortest_path(source, target)
 
     if path is None:
